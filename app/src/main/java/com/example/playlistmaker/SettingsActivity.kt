@@ -12,8 +12,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val btnBack = findViewById<View>(R.id.back_button)
         btnBack.setOnClickListener{
-            intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            finish()
         }
 
     }
