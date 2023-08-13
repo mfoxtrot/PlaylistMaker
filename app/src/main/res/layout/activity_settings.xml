@@ -75,6 +75,7 @@
                 android:textFontWeight="400"
                 android:layout_weight="1"/>
             <ImageView
+                android:id="@+id/shareAppIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_share"
@@ -96,6 +97,7 @@
                 android:textFontWeight="400"
                 android:layout_weight="1"/>
             <ImageView
+                android:id="@+id/supportIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_support"
@@ -117,6 +119,7 @@
                 android:textFontWeight="400"
                 android:layout_weight="1"/>
             <ImageView
+                android:id="@+id/userAgreementIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_submenu"

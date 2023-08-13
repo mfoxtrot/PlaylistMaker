@@ -8,4 +8,7 @@
     <string name="settings_menu_user_agreement">User agreement</string>
     <string name="settings_menu_write_to_support">Write to support</string>
     <string name="settings_menu_share_app">Share app</string>
+
+    <string name="support_subject_text">Message to PlayList Maker app developers</string>
+    <string name="support_body_text">Thank you for the cool app!</string>
 </resources>
