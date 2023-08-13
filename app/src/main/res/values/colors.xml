@@ -5,11 +5,11 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="menu_background">#3772E7</color>
-    <color name="menu_text">#1A1B22</color>
-    <color name="main_menu_icon">#1A1B22</color>
-    <color name="settings_menu_text">#000000</color>
-    <color name="settings_menu_icon">#AEAFB4</color>
+
+    <!--attributes for color system-->
+    <color name="white_000">#FFFFFF</color>
+    <color name="blue_500">#3772E7</color>
+    <color name="black_500">#1A1B22</color>
+    <color name="gray_500">#AEAFB4</color>
+    <color name="gray_200">#E6E8EB</color>
 </resources>
