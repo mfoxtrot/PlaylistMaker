@@ -11,14 +11,9 @@
         >
         <ImageView
             android:id = "@+id/back_button"
-            android:src="@drawable/ic_back_arrow"
-            android:layout_width = "16dp"
-            android:layout_height="16dp"
-            android:layout_gravity="center"
-            app:tint="?attr/colorOnPrimary" />
+            style="@style/activity_back_arrow"/>
         <TextView
             style="@style/activity_title"
-            android:layout_marginLeft="28dp"
             android:text="@string/main_menu_settings"/>
     </LinearLayout>
     <LinearLayout
