@@ -2,21 +2,17 @@ package com.example.playlistmaker
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.MotionEvent
-import android.view.View
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.core.widget.doOnTextChanged
 
 class SearchActivity : AppCompatActivity() {
-    companion object {
+    private companion object {
         const val SAVED_SEARCH_STRING = "SAVED_SEARCH_STRING"
     }
 
-    lateinit var etSearchBox: EditText
+    private lateinit var etSearchBox: EditText
     private var searchString = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,22 +25,10 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        val textWatcher = object: TextWatcher{
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //Empty
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                setEndDrawableVisibility(!s.isNullOrEmpty())
-                searchString = s.toString()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                //Empty
-            }
+        etSearchBox.doOnTextChanged { text, _, _, _ ->
+            setEndDrawableVisibility(!text.isNullOrEmpty())
+            searchString = text.toString()
         }
-
-        etSearchBox.addTextChangedListener(textWatcher)
 
         etSearchBox.setOnTouchListener { v, event ->
             var result = false

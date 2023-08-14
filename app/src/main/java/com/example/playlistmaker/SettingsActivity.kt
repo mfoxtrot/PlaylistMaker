@@ -37,8 +37,8 @@ class SettingsActivity : AppCompatActivity() {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, getString(R.string.android_course_url))
+            startActivity(this)
         }
-        startActivity(intent)
     }
 
     private fun callSupport() {
@@ -47,14 +47,14 @@ class SettingsActivity : AppCompatActivity() {
             putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.my_email)))
             putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject_text))
             putExtra(Intent.EXTRA_TEXT, getString(R.string.support_body_text))
+            startActivity(this)
         }
-        startActivity(intent)
     }
 
     private fun openUserAgreement(){
         val intent = Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(getString(R.string.user_agreement_url))
+            startActivity(this)
         }
-        startActivity(intent)
     }
 }

@@ -10,10 +10,12 @@
         >
         <ImageView
             android:id = "@+id/back_button"
-            style="@style/activity_back_arrow"/>
+            style="@style/activity_back_arrow"
+            android:layout_gravity="center"/>
         <TextView
             style="@style/activity_title"
-            android:text="@string/main_menu_search"/>
+            android:text="@string/main_menu_search"
+            android:layout_marginLeft="28dp"/>
     </LinearLayout>
 
     <EditText
