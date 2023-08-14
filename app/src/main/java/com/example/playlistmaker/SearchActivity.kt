@@ -6,31 +6,33 @@ import android.view.MotionEvent
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.widget.doOnTextChanged
+import com.example.playlistmaker.databinding.ActivitySearchBinding
 
 class SearchActivity : AppCompatActivity() {
     private companion object {
         const val SAVED_SEARCH_STRING = "SAVED_SEARCH_STRING"
     }
 
-    private lateinit var etSearchBox: EditText
+    private lateinit var binding: ActivitySearchBinding
+
     private var searchString = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
 
-        etSearchBox = findViewById(R.id.search_box)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
 
-        val btnBack = findViewById<ImageView>(R.id.back_button)
-        btnBack.setOnClickListener() {
+        binding.backButton.setOnClickListener() {
             finish()
         }
 
-        etSearchBox.doOnTextChanged { text, _, _, _ ->
+        binding.searchBox.doOnTextChanged { text, _, _, _ ->
             setEndDrawableVisibility(!text.isNullOrEmpty())
             searchString = text.toString()
         }
 
-        etSearchBox.setOnTouchListener { v, event ->
+        binding.searchBox.setOnTouchListener { v, event ->
             var result = false
             if (v is EditText) {
                 if (event.x >= v.width - v.totalPaddingRight) {
@@ -53,12 +55,12 @@ class SearchActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         searchString = savedInstanceState.getString(SAVED_SEARCH_STRING,"").toString()
-        etSearchBox.setText(searchString)
+        binding.searchBox.setText(searchString)
     }
     private fun setEndDrawableVisibility(isVisible: Boolean) {
         val leftDrawable = getDrawable(R.drawable.ic_search)
         val rightDrawable = if (isVisible) getDrawable(R.drawable.ic_close) else null
-        etSearchBox.setCompoundDrawablesWithIntrinsicBounds(
+        binding.searchBox.setCompoundDrawablesWithIntrinsicBounds(
             leftDrawable,
             null,
             rightDrawable,

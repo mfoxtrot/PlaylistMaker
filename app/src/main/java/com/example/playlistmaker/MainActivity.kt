@@ -4,29 +4,33 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.example.playlistmaker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        val btnSearch = findViewById<View>(R.id.main_menu_search)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         val btnSearchClickListener: View.OnClickListener = object : View.OnClickListener {
             override fun onClick(v: View?) {
                 intent = Intent(this@MainActivity, SearchActivity::class.java)
                 startActivity(intent)
             }
         }
-        btnSearch.setOnClickListener(btnSearchClickListener)
+        binding.mainMenuSearch.setOnClickListener(btnSearchClickListener)
 
-        val btnMedia = findViewById<View>(R.id.main_menu_media)
-        btnMedia.setOnClickListener {
+        binding.mainMenuMedia.setOnClickListener {
             intent = Intent(this, MediaActivity::class.java)
             startActivity(intent)
         }
 
-        val btnSettings = findViewById<View>(R.id.main_menu_settings)
-        btnSettings.setOnClickListener {
+        binding.mainMenuSettings.setOnClickListener {
             intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
         }

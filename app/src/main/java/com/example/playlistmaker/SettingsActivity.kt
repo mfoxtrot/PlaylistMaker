@@ -5,29 +5,32 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySettingsBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
 
-        val btnBack = findViewById<View>(R.id.back_button)
-        btnBack.setOnClickListener{
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
+        binding.backButton.setOnClickListener{
             finish()
         }
 
-        val imgShareApp = findViewById<View>(R.id.shareAppIcon)
-        imgShareApp.setOnClickListener {
+        binding.shareAppIcon.setOnClickListener {
             shareApp()
         }
 
-        val imgSupport = findViewById<View>(R.id.supportIcon)
-        imgSupport.setOnClickListener {
+        binding.supportIcon.setOnClickListener {
             callSupport()
         }
 
-        val imgUserAgreement = findViewById<View>(R.id.userAgreementIcon)
-        imgUserAgreement.setOnClickListener{
+        binding.userAgreementIcon.setOnClickListener{
             openUserAgreement()
         }
 
