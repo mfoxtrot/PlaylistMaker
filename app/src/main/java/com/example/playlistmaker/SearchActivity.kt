@@ -1,8 +1,11 @@
 package com.example.playlistmaker
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.widget.doOnTextChanged
@@ -39,6 +42,7 @@ class SearchActivity : AppCompatActivity() {
                     if (event.action == MotionEvent.ACTION_UP) {
                         result = true
                         v.text.clear()
+                        hideKeyboard(v)
                         searchString=""
                     }
                 }
@@ -67,4 +71,8 @@ class SearchActivity : AppCompatActivity() {
             null)
     }
 
+    private fun hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
 }
