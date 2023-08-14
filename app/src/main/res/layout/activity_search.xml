@@ -29,6 +29,7 @@
         android:fontFamily="@font/ys_display_regular"
         android:textFontWeight="400"
         android:textSize="16sp"
+        android:textColor="?attr/colorOnSecondary"
         android:height="36dp"
         android:background="@drawable/rounded_text_box"
         android:hint="@string/search_box_hint"

@@ -11,6 +11,7 @@
         <item name="colorSurface">@color/white_000</item>
         <item name="colorContainer">@color/white_000</item>
         <item name="colorOnContainer">@color/black_500</item>
+        <item name="colorOnSecondary">@color/black_500</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
