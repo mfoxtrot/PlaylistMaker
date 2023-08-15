@@ -11,6 +11,8 @@
         android:id="@+id/art_work_url"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:background="@drawable/rounded_rectangle_2px"
+        android:clipToOutline="true"
         tools:src="@tools:sample/avatars"
         />
     <LinearLayout
