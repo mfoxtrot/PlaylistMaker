@@ -37,7 +37,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun shareApp(){
-        val intent = Intent(Intent.ACTION_SEND).apply {
+        Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, getString(R.string.android_course_url))
             startActivity(this)
@@ -45,7 +45,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun callSupport() {
-        val intent = Intent(Intent.ACTION_SENDTO).apply {
+        Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("mailto:")
             putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.my_email)))
             putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject_text))
@@ -55,7 +55,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun openUserAgreement(){
-        val intent = Intent(Intent.ACTION_VIEW).apply {
+        Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse(getString(R.string.user_agreement_url))
             startActivity(this)
         }
