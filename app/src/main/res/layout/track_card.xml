@@ -14,21 +14,20 @@
         android:layout_height="45dp"
         android:background="@drawable/rounded_rectangle_2px"
         android:clipToOutline="true"
-        tools:src="@tools:sample/avatars"
-        />
+        tools:src="@tools:sample/avatars"/>
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_weight="1"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="28dp">
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="28dp">
         <TextView
             android:id="@+id/track_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="6dp"
-            android:paddingRight="28dp"
+            android:paddingEnd="28dp"
             android:maxLines="1"
             android:ellipsize="end"
             style="@style/search_activity_track_title"
@@ -64,7 +63,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingRight="4dp"
+        android:paddingEnd="4dp"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_submenu"
         app:tint="?attr/colorSecondaryVariant" />
