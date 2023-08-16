@@ -7,7 +7,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.ImageView
 import androidx.core.widget.doOnTextChanged
 import com.example.playlistmaker.databinding.ActivitySearchBinding
 
@@ -51,8 +50,7 @@ class SearchActivity : AppCompatActivity() {
             result
         }
 
-        val tracksAdapter = TracksAdapter(mockList())
-        binding.searchList.adapter = tracksAdapter
+        binding.searchList.adapter = TracksAdapter(mockList())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
