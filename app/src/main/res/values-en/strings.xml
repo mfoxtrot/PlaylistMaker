@@ -13,4 +13,8 @@
     <string name="support_body_text">Thank you for the cool app!</string>
 
     <string name="search_box_hint">Find</string>
+    <string name="refresh">Refresh</string>
+    <string name="connection_problem">No connection</string>
+    <string name="download_failed">Download failed. Check\nyour Internet connection</string>
+    <string name="no_results">Nothing was found</string>
 </resources>
