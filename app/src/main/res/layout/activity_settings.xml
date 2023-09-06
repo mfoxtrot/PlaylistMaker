@@ -30,6 +30,7 @@
                 android:layout_weight="1"
                 android:text="@string/settings_menu_black_theme"/>
             <Switch
+                android:id="@+id/switch_dark_theme"
                 style="@style/settings_activity_list_item_icon"/>
         </LinearLayout>
         <LinearLayout

@@ -18,8 +18,14 @@ class SettingsActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        binding.switchDarkTheme.isChecked = (applicationContext as App).darkTheme
+
         binding.backButton.setOnClickListener{
             finish()
+        }
+
+        binding.switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
+            (applicationContext as App).switchTheme(isChecked)
         }
 
         binding.shareAppIcon.setOnClickListener {
