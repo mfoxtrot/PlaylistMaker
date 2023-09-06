@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TracksViewHolder(private val trackCardBinding: TrackCardBinding): RecyclerView.ViewHolder(trackCardBinding.root) {
+    private val dateFormat by lazy { SimpleDateFormat("m:ss", Locale.getDefault()) }
     fun bind(track: Track) {
         trackCardBinding.trackName.text = track.trackName
         trackCardBinding.artistName.text = track.artistName
@@ -20,6 +21,6 @@ class TracksViewHolder(private val trackCardBinding: TrackCardBinding): Recycler
     }
 
     private fun formatTime(timeMillis: Long):String {
-        return SimpleDateFormat("m:ss", Locale.getDefault()).format(timeMillis)
+        return dateFormat.format(timeMillis)
     }
 }

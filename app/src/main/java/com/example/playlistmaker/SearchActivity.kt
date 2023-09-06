@@ -125,9 +125,10 @@ class SearchActivity : AppCompatActivity() {
                 ) {
                     when (response.code()) {
                         200 -> {
-                            if (response.body()?.results?.isNotEmpty() == true) {
+                            val results = response.body()?.results
+                            if (results?.isNotEmpty() == true) {
                                 trackList.clear()
-                                trackList.addAll(response.body()?.results!!)
+                                trackList.addAll(results)
                                 adapter.notifyDataSetChanged()
                                 showResult(SearchResultType.OK)
                             } else {
