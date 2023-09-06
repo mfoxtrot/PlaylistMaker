@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.TrackCardBinding
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TracksAdapter(
     private val tracks: ArrayList<Track>
@@ -19,5 +21,4 @@ class TracksAdapter(
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         holder.bind(tracks[position])
     }
-
 }

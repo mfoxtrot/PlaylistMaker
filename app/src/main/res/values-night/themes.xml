@@ -15,6 +15,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="no_search_results_placeholder">@drawable/ic_no_search_results_dark</item>
+        <item name="no_connection_placeholder">@drawable/ic_no_connection_dark</item>
+        <!--Special colors-->
+        <item name="refresh_button_background_color">@color/white_000</item>
+        <item name="refresh_button_text_color">@color/black_500</item>
     </style>
 
     <style name="Theme.PlaylistMaker.MainActivity" parent="Theme.PlaylistMaker">

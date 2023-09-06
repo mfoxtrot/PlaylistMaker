@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="no_search_results_placeholder" format="reference"/>
+    <attr name="no_connection_placeholder" format="reference"/>
+    <attr name="refresh_button_background_color" format="color"/>
+    <attr name="refresh_button_text_color" format="color"/>
+</resources>
