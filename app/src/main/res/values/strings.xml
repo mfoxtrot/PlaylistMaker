@@ -19,4 +19,6 @@
     <string name="connection_problem">Проблемы со связью</string>
     <string name="download_failed">Загрузка не удалась. Проверьте\nподключение к интернету</string>
     <string name="no_results">Ничего не нашлось</string>
+    <string name="search_history">Вы искали</string>
+    <string name="clear_history">Очистить историю</string>
 </resources>
