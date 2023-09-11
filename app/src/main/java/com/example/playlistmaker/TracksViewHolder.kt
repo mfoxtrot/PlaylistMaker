@@ -18,6 +18,10 @@ class TracksViewHolder(private val trackCardBinding: TrackCardBinding): Recycler
             .placeholder(R.drawable.ic_placeholder)
             .centerCrop()
             .into(trackCardBinding.artWorkUrl)
+
+        trackCardBinding.trackCard.setOnClickListener {
+            (trackCardBinding.root.context.applicationContext as App).history.addTrack(track)
+        }
     }
 
     private fun formatTime(timeMillis: Long):String {

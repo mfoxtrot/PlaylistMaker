@@ -9,11 +9,14 @@ const val DARK_THEME_KEY = "dark_theme"
 class App: Application() {
     var darkTheme = false
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var history: SearchHistory
     override fun onCreate() {
         super.onCreate()
         sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         darkTheme = sharedPreferences.getBoolean(DARK_THEME_KEY, false)
         switchTheme(darkTheme)
+
+        history = SearchHistory(sharedPreferences)
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

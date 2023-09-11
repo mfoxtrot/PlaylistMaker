@@ -29,6 +29,7 @@ class SearchHistory(private val prefs: SharedPreferences) {
 
     fun clear() {
         list.clear()
+        searchHistoryToPrefs()
     }
 
     private fun searchHistoryFromPrefs(){
