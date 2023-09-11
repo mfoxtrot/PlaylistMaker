@@ -61,6 +61,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchBox.doOnTextChanged { text, _, _, _ ->
             setEndDrawableVisibility(!text.isNullOrEmpty())
             searchString = text.toString()
+            binding.searchList.isVisible = false
             updateHistoryVisibility()
         }
 
