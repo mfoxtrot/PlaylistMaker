@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatDelegate
 const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
 const val DARK_THEME_KEY = "dark_theme"
 class App: Application() {
-    var darkTheme = false
+    private var darkTheme = false
     private lateinit var sharedPreferences: SharedPreferences
     lateinit var history: SearchHistory
     override fun onCreate() {
@@ -32,5 +32,9 @@ class App: Application() {
         sharedPreferences.edit()
             .putBoolean(DARK_THEME_KEY, darkTheme)
             .apply()
+    }
+
+    fun isDarkThemeSwitchedOn(): Boolean {
+        return darkTheme
     }
 }
