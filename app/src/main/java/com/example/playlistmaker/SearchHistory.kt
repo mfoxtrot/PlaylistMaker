@@ -4,12 +4,12 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 
 const val SEARCH_HISTORY_LIST_KEY = "search_history"
-const val SEARCH_HISTORY_LIST_SIZE = 10
+const val SEARCH_HISTORY_LIST_SIZE = 5
 class SearchHistory(private val prefs: SharedPreferences) {
-    var list = arrayListOf<Track>()
+    private val list = arrayListOf<Track>()
 
     init {
-        searchHistoryFromPrefs()
+        list.addAll(searchHistoryFromPrefs())
     }
 
     fun addTrack(track: Track) {
@@ -21,7 +21,7 @@ class SearchHistory(private val prefs: SharedPreferences) {
         list.add(0, track)
 
         if (list.size > SEARCH_HISTORY_LIST_SIZE) {
-            list.dropLast(SEARCH_HISTORY_LIST_SIZE - list.size)
+            list.removeAt(SEARCH_HISTORY_LIST_SIZE)
         }
 
         searchHistoryToPrefs()
@@ -32,11 +32,15 @@ class SearchHistory(private val prefs: SharedPreferences) {
         searchHistoryToPrefs()
     }
 
-    private fun searchHistoryFromPrefs(){
+    fun allTracks():ArrayList<Track> {
+        return list
+    }
+
+    private fun searchHistoryFromPrefs():ArrayList<Track>{
         val json = prefs.getString(SEARCH_HISTORY_LIST_KEY,"")
-        if (json != "") {
-            list = Gson().fromJson(json, Array<Track>::class.java).toCollection(ArrayList<Track>())
-        }
+        if (json == "") return arrayListOf()
+        return Gson().fromJson(json, Array<Track>::class.java).toCollection(ArrayList<Track>())
+
     }
 
     private fun searchHistoryToPrefs() {

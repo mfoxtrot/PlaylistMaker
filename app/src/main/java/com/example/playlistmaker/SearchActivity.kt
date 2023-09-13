@@ -52,7 +52,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         history = (applicationContext as App).history
-        historyAdapter = TracksAdapter(history.list)
+        historyAdapter = TracksAdapter(history.allTracks())
 
 
         binding.searchList.adapter = adapter
@@ -182,6 +182,6 @@ class SearchActivity : AppCompatActivity() {
     private fun isHistoryVisible():Boolean {
         return binding.searchBox.hasFocus()
                 && searchString.isNullOrEmpty()
-                && history.list.isNotEmpty()
+                && history.allTracks().isNotEmpty()
     }
 }
