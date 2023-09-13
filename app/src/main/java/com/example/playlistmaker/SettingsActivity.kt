@@ -24,7 +24,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         binding.switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
-            (applicationContext as App).switchTheme(isChecked)
+            (application as App).switchTheme(isChecked)
         }
 
         binding.shareAppIcon.setOnClickListener {

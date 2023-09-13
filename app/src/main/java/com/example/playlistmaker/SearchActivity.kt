@@ -51,7 +51,7 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        history = (applicationContext as App).history
+        history = (application as App).history
         historyAdapter = TracksAdapter(history.allTracks())
 
 
@@ -105,7 +105,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.btnClearHistory.setOnClickListener {
-            (applicationContext as App).history.clear()
+            (application as App).history.clear()
             historyAdapter.notifyDataSetChanged()
             updateHistoryVisibility()
         }
