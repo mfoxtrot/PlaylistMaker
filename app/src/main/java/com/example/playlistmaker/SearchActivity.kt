@@ -32,8 +32,11 @@ class SearchActivity : AppCompatActivity() {
         .build()
     private val itunesSearchService = retrofit.create(ItunesSearchApiService::class.java)
 
+    private lateinit var history: SearchHistory
+    private lateinit var historyAdapter: TracksAdapter
+
     private val trackList: ArrayList<Track> = arrayListOf()
-    private val adapter = TracksAdapter(trackList)
+    private val adapter = TracksAdapter(trackList) { track: Track -> clickOnTrack(track) }
 
     private var searchString = ""
     private var lastSearchString = ""
@@ -48,11 +51,18 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
+        history = (application as App).history
+        historyAdapter = TracksAdapter(history.allTracks()) { track: Track -> clickOnTrack(track) }
+
+
         binding.searchList.adapter = adapter
+        binding.searchHistoryList.adapter = historyAdapter
 
         binding.searchBox.doOnTextChanged { text, _, _, _ ->
             setEndDrawableVisibility(!text.isNullOrEmpty())
             searchString = text.toString()
+            binding.searchList.isVisible = false
+            updateHistoryVisibility()
         }
 
         binding.searchBox.setOnTouchListener { v, event ->
@@ -66,6 +76,9 @@ class SearchActivity : AppCompatActivity() {
                         adapter.notifyDataSetChanged()
                         hideKeyboard(v)
                         searchString=""
+                        binding.searchList.isVisible = false
+                        historyAdapter.notifyDataSetChanged()
+                        updateHistoryVisibility()
                     }
                 }
             }
@@ -81,10 +94,20 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
+        binding.searchBox.setOnFocusChangeListener { _, _ ->
+            updateHistoryVisibility()
+        }
+
         binding.btnRefresh.setOnClickListener{
             binding.searchBox.setText(lastSearchString)
             binding.searchBox.setSelection(lastSearchString.length)
             findTracks(lastSearchString)
+        }
+
+        binding.btnClearHistory.setOnClickListener {
+            (application as App).history.clear()
+            historyAdapter.notifyDataSetChanged()
+            updateHistoryVisibility()
         }
     }
 
@@ -146,9 +169,23 @@ class SearchActivity : AppCompatActivity() {
             })
     }
 
-    fun showResult(type: SearchResultType){
+    private fun showResult(type: SearchResultType){
         binding.searchList.isVisible = (type == SearchResultType.OK)
         binding.noResults.isVisible = (type == SearchResultType.NO_RESULTS)
         binding.noConnection.isVisible = (type == SearchResultType.ERROR)
+    }
+
+    private fun updateHistoryVisibility() {
+        binding.llSearchHistory.isVisible = isHistoryVisible()
+    }
+
+    private fun isHistoryVisible():Boolean {
+        return binding.searchBox.hasFocus()
+                && searchString.isNullOrEmpty()
+                && history.allTracks().isNotEmpty()
+    }
+
+    private fun clickOnTrack(track: Track) {
+        history.addTrack(track)
     }
 }

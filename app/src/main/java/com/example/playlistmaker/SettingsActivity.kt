@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
@@ -18,8 +17,14 @@ class SettingsActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        binding.switchDarkTheme.isChecked = (applicationContext as App).isDarkThemeSwitchedOn()
+
         binding.backButton.setOnClickListener{
             finish()
+        }
+
+        binding.switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
+            (application as App).switchTheme(isChecked)
         }
 
         binding.shareAppIcon.setOnClickListener {
