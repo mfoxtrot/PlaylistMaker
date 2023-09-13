@@ -36,7 +36,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var historyAdapter: TracksAdapter
 
     private val trackList: ArrayList<Track> = arrayListOf()
-    private val adapter = TracksAdapter(trackList)
+    private val adapter = TracksAdapter(trackList) { track: Track -> clickOnTrack(track) }
 
     private var searchString = ""
     private var lastSearchString = ""
@@ -52,7 +52,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         history = (application as App).history
-        historyAdapter = TracksAdapter(history.allTracks())
+        historyAdapter = TracksAdapter(history.allTracks()) { track: Track -> clickOnTrack(track) }
 
 
         binding.searchList.adapter = adapter
@@ -183,5 +183,9 @@ class SearchActivity : AppCompatActivity() {
         return binding.searchBox.hasFocus()
                 && searchString.isNullOrEmpty()
                 && history.allTracks().isNotEmpty()
+    }
+
+    private fun clickOnTrack(track: Track) {
+        history.addTrack(track)
     }
 }

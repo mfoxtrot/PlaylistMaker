@@ -8,7 +8,8 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TracksAdapter(
-    private val tracks: ArrayList<Track>
+    private val tracks: ArrayList<Track>,
+    private val clickOnTrackListener: (Track)-> Unit
 ): RecyclerView.Adapter<TracksViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TracksViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -20,5 +21,6 @@ class TracksAdapter(
 
     override fun onBindViewHolder(holder: TracksViewHolder, position: Int) {
         holder.bind(tracks[position])
+        holder.itemView.setOnClickListener { clickOnTrackListener(tracks[position]) }
     }
 }
