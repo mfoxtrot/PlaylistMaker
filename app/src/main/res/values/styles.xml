@@ -87,4 +87,39 @@
         <item name="android:textColor">?attr/refresh_button_text_color</item>
     </style>
 
+    <style name="player_activity_track_property_name">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/player_details_property_name_color</item>
+    </style>
+
+    <style name="player_activity_track_property_value">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/player_details_property_value_color</item>
+    </style>
+
+    <style name="player_activity_time_countdown">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textColor">?attr/player_time_countdown_color</item>
+    </style>
+
+    <style name="player_artist_name">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/player_artist_name_color</item>
+    </style>
+
+    <style name="player_track_name">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/player_track_name_color</item>
+    </style>
+
 </resources>

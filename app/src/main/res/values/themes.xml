@@ -20,6 +20,14 @@
         <!--Special colors-->
         <item name="refresh_button_background_color">@color/black_500</item>
         <item name="refresh_button_text_color">@color/white_000</item>
+        <item name="player_details_property_name_color">@color/gray_500</item>
+        <item name="player_details_property_value_color">@color/black_500</item>
+        <item name="player_time_countdown_color">@color/black_500</item>
+        <item name="player_play_button_background_color">@color/black_500</item>
+        <item name="player_add_to_playlist_button_background_color">@color/black_500</item>
+        <item name="player_add_to_favorites_button_background_color">@color/black_500</item>
+        <item name="player_artist_name_color">@color/black_500</item>
+        <item name="player_track_name_color">@color/black_500</item>
     </style>
 
     <style name="Theme.PlaylistMaker.MainActivity" parent="Theme.PlaylistMaker">
