@@ -36,6 +36,10 @@ class SearchHistory(private val prefs: SharedPreferences) {
         return list
     }
 
+    fun lastVisitingTrack():Track {
+        return list[0]
+    }
+
     private fun searchHistoryFromPrefs():ArrayList<Track>{
         val json = prefs.getString(SEARCH_HISTORY_LIST_KEY,"")
         if (json == "") return arrayListOf()

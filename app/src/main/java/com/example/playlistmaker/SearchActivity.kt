@@ -1,6 +1,7 @@
 package com.example.playlistmaker
 
 import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
@@ -187,5 +188,8 @@ class SearchActivity : AppCompatActivity() {
 
     private fun clickOnTrack(track: Track) {
         history.addTrack(track)
+        historyAdapter.notifyDataSetChanged()
+        intent = Intent(this, PlayerActivity::class.java)
+        startActivity(intent)
     }
 }
