@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 
 const val SEARCH_HISTORY_LIST_KEY = "search_history"
-const val SEARCH_HISTORY_LIST_SIZE = 5
+const val SEARCH_HISTORY_LIST_SIZE = 10
 class SearchHistory(private val prefs: SharedPreferences) {
     private val list = arrayListOf<Track>()
 
