@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -37,7 +39,7 @@ class PlayerActivity: AppCompatActivity() {
         Glide.with(binding.root)
             .load(currentTrack.getCoverArtworkURI())
             .placeholder(R.drawable.ic_placeholder_large)
-            .centerInside()
+            .transform(CenterInside(),RoundedCorners(8))
             .into(binding.ivArtwork)
 
         binding.backButton.setOnClickListener {

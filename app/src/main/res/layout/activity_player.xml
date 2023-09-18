@@ -223,6 +223,8 @@
         app:layout_constraintBottom_toTopOf="@id/tv_track_name"
         app:layout_constraintStart_toStartOf="@id/left_main_guideline"
         app:layout_constraintEnd_toEndOf="@id/right_main_guideline"
+        android:layout_marginTop="26dp"
+        android:layout_marginBottom="24dp"
         tools:src="@drawable/ic_placeholder"
         />
     <!--track title&image end-->
