@@ -2,13 +2,27 @@
 <resources>
     <!--Общие стили-->
     <style name="activity_container">
-        <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingTop">14dp</item>
-        <item name="android:paddingRight">16dp</item>
+    </style>
+
+    <style name="activity_toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="activity_content_container">
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <style name="activity_content_item">
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
     </style>
 
     <style name="activity_title">
