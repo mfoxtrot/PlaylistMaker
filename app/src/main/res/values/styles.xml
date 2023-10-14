@@ -2,13 +2,27 @@
 <resources>
     <!--Общие стили-->
     <style name="activity_container">
-        <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingTop">14dp</item>
-        <item name="android:paddingRight">16dp</item>
+    </style>
+
+    <style name="activity_toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="activity_content_container">
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingEnd">16dp</item>
+    </style>
+
+    <style name="activity_content_item">
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
     </style>
 
     <style name="activity_title">
@@ -85,6 +99,41 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:backgroundTint">?attr/refresh_button_background_color</item>
         <item name="android:textColor">?attr/refresh_button_text_color</item>
+    </style>
+
+    <style name="player_activity_track_property_name">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/player_details_property_name_color</item>
+    </style>
+
+    <style name="player_activity_track_property_value">
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/player_details_property_value_color</item>
+    </style>
+
+    <style name="player_activity_time_countdown">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textColor">?attr/player_time_countdown_color</item>
+    </style>
+
+    <style name="player_artist_name">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/player_artist_name_color</item>
+    </style>
+
+    <style name="player_track_name">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">?attr/player_track_name_color</item>
     </style>
 
 </resources>

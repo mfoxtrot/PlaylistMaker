@@ -4,4 +4,13 @@
     <attr name="no_connection_placeholder" format="reference"/>
     <attr name="refresh_button_background_color" format="color"/>
     <attr name="refresh_button_text_color" format="color"/>
+
+    <attr name="player_details_property_name_color" format="color"/>
+    <attr name="player_details_property_value_color" format="color"/>
+    <attr name="player_time_countdown_color" format="color"/>
+    <attr name="player_play_button_background_color" format="color"/>
+    <attr name="player_add_to_playlist_button_background_color" format="color"/>
+    <attr name="player_add_to_favorites_button_background_color" format="color"/>
+    <attr name="player_artist_name_color" format="color"/>
+    <attr name="player_track_name_color" format="color"/>
 </resources>
