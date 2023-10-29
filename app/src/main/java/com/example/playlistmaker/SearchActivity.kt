@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -23,6 +25,8 @@ class SearchActivity : AppCompatActivity() {
     private companion object {
         const val SAVED_SEARCH_STRING = "SAVED_SEARCH_STRING"
         const val LAST_SEARCH_STRING = "LAST_SEARCH_STRING"
+
+        private const val DEBOUNCE_SEARCH_DELAY = 2000L
     }
 
     private lateinit var binding: ActivitySearchBinding
@@ -41,6 +45,10 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchString = ""
     private var lastSearchString = ""
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { findTracks(searchString) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -64,6 +72,7 @@ class SearchActivity : AppCompatActivity() {
             searchString = text.toString()
             binding.searchList.isVisible = false
             updateHistoryVisibility()
+            searchDebounce()
         }
 
         binding.searchBox.setOnTouchListener { v, event ->
@@ -192,4 +201,10 @@ class SearchActivity : AppCompatActivity() {
         intent = Intent(this, PlayerActivity::class.java)
         startActivity(intent)
     }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, DEBOUNCE_SEARCH_DELAY)
+    }
 }
+
