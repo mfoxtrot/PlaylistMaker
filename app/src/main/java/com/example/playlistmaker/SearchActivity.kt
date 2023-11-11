@@ -27,6 +27,7 @@ class SearchActivity : AppCompatActivity() {
         const val LAST_SEARCH_STRING = "LAST_SEARCH_STRING"
 
         private const val DEBOUNCE_SEARCH_DELAY = 2000L
+        private const val DEBOUNCE_CLICK_DELAY = 1000L
     }
 
     private lateinit var binding: ActivitySearchBinding
@@ -48,6 +49,8 @@ class SearchActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { findTracks(searchString) }
+
+    private var isClickAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -198,15 +201,26 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clickOnTrack(track: Track) {
-        history.addTrack(track)
-        historyAdapter.notifyDataSetChanged()
-        intent = Intent(this, PlayerActivity::class.java)
-        startActivity(intent)
+        if (clickDebounce()) {
+            history.addTrack(track)
+            historyAdapter.notifyDataSetChanged()
+            intent = Intent(this, PlayerActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun searchDebounce() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, DEBOUNCE_SEARCH_DELAY)
+    }
+
+    private fun clickDebounce():Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed = true}, DEBOUNCE_CLICK_DELAY)
+        }
+        return current
     }
 }
 
