@@ -149,6 +149,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun findTracks(text: String) {
+        showResult(SearchResultType.IN_PROGRESS)
         itunesSearchService
             .searchSongs(text)
             .enqueue(object :Callback<SearchResponse> {
@@ -183,6 +184,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchList.isVisible = (type == SearchResultType.OK)
         binding.noResults.isVisible = (type == SearchResultType.NO_RESULTS)
         binding.noConnection.isVisible = (type == SearchResultType.ERROR)
+        binding.progressBar.isVisible = (type == SearchResultType.IN_PROGRESS)
     }
 
     private fun updateHistoryVisibility() {

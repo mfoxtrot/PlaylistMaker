@@ -13,4 +13,6 @@
     <attr name="player_add_to_favorites_button_background_color" format="color"/>
     <attr name="player_artist_name_color" format="color"/>
     <attr name="player_track_name_color" format="color"/>
+
+    <attr name="progress_bar_color" format="color"/>
 </resources>
