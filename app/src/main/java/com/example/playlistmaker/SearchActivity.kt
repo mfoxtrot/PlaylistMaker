@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
@@ -19,11 +21,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
-
-    private companion object {
-        const val SAVED_SEARCH_STRING = "SAVED_SEARCH_STRING"
-        const val LAST_SEARCH_STRING = "LAST_SEARCH_STRING"
-    }
 
     private lateinit var binding: ActivitySearchBinding
 
@@ -41,8 +38,17 @@ class SearchActivity : AppCompatActivity() {
 
     private var searchString = ""
     private var lastSearchString = ""
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { findTracks(searchString) }
+
+    private var isClickAllowed = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        history = (application as App).history
+        historyAdapter = TracksAdapter(history.allTracks()) { track: Track -> clickOnTrack(track) }
 
         binding = ActivitySearchBinding.inflate(layoutInflater)
         val view = binding.root
@@ -52,10 +58,6 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-        history = (application as App).history
-        historyAdapter = TracksAdapter(history.allTracks()) { track: Track -> clickOnTrack(track) }
-
-
         binding.searchList.adapter = adapter
         binding.searchHistoryList.adapter = historyAdapter
 
@@ -64,6 +66,7 @@ class SearchActivity : AppCompatActivity() {
             searchString = text.toString()
             binding.searchList.isVisible = false
             updateHistoryVisibility()
+            searchDebounce()
         }
 
         binding.searchBox.setOnTouchListener { v, event ->
@@ -140,6 +143,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun findTracks(text: String) {
+        showResult(SearchResultType.IN_PROGRESS)
         itunesSearchService
             .searchSongs(text)
             .enqueue(object :Callback<SearchResponse> {
@@ -171,9 +175,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showResult(type: SearchResultType){
-        binding.searchList.isVisible = (type == SearchResultType.OK)
-        binding.noResults.isVisible = (type == SearchResultType.NO_RESULTS)
-        binding.noConnection.isVisible = (type == SearchResultType.ERROR)
+        with(binding) {
+            searchList.isVisible = (type == SearchResultType.OK)
+            noResults.isVisible = (type == SearchResultType.NO_RESULTS)
+            noConnection.isVisible = (type == SearchResultType.ERROR)
+            progressBar.isVisible = (type == SearchResultType.IN_PROGRESS)
+        }
     }
 
     private fun updateHistoryVisibility() {
@@ -187,9 +194,36 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun clickOnTrack(track: Track) {
-        history.addTrack(track)
-        historyAdapter.notifyDataSetChanged()
-        intent = Intent(this, PlayerActivity::class.java)
-        startActivity(intent)
+        if (clickDebounce()) {
+            history.addTrack(track)
+            historyAdapter.notifyDataSetChanged()
+            intent = Intent(this, PlayerActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    private fun searchDebounce() {
+        with(handler){
+            removeCallbacks(searchRunnable)
+            postDelayed(searchRunnable, DEBOUNCE_SEARCH_DELAY)
+        }
+    }
+
+    private fun clickDebounce():Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({isClickAllowed = true}, DEBOUNCE_CLICK_DELAY)
+        }
+        return current
+    }
+
+    private companion object {
+        const val SAVED_SEARCH_STRING = "SAVED_SEARCH_STRING"
+        const val LAST_SEARCH_STRING = "LAST_SEARCH_STRING"
+
+        private const val DEBOUNCE_SEARCH_DELAY = 2000L
+        private const val DEBOUNCE_CLICK_DELAY = 1000L
     }
 }
+

@@ -136,4 +136,8 @@
         <item name="android:textColor">?attr/player_track_name_color</item>
     </style>
 
+    <style name="progress_bar">
+        <item name="android:indeterminateTint">?attr/progress_bar_color</item>
+    </style>
+
 </resources>
