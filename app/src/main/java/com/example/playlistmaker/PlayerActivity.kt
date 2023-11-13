@@ -27,10 +27,6 @@ class PlayerActivity: AppCompatActivity() {
 
     private var millsPlayed = 0L
 
-    companion object {
-        private const val DELAY = 100L
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,25 +38,28 @@ class PlayerActivity: AppCompatActivity() {
 
         currentTrack = (application as App).history.lastVisitingTrack()
 
-        binding.tvCountry.text = currentTrack.country
-        binding.tvGenre.text = currentTrack.primaryGenreName
-        binding.tvYear.text = currentTrack.getReleaseYear()
-        binding.tvAlbum.text = currentTrack.collectionName
-        binding.tvDuration.text = formatTimeMMSS(currentTrack.trackTimeMillis)
-        binding.tvArtistName.text = currentTrack.artistName
-        binding.tvTrackName.text = currentTrack.trackName
-
-        binding.grpAlbum.isVisible = currentTrack.hasAlbum()
+        with(binding) {
+            tvCountry.text = currentTrack.country
+            tvGenre.text = currentTrack.primaryGenreName
+            tvYear.text = currentTrack.getReleaseYear()
+            tvAlbum.text = currentTrack.collectionName
+            tvDuration.text = formatTimeMMSS(currentTrack.trackTimeMillis)
+            tvArtistName.text = currentTrack.artistName
+            tvTrackName.text = currentTrack.trackName
+            grpAlbum.isVisible = currentTrack.hasAlbum()
+            backButton.setOnClickListener {
+                finish()
+            }
+            btnPlayPause.setOnClickListener {
+                handlePlayerClick()
+            }
+        }
 
         Glide.with(binding.root)
             .load(currentTrack.getCoverArtworkURI())
             .placeholder(R.drawable.ic_placeholder_large)
             .transform(CenterInside(),RoundedCorners(8))
             .into(binding.ivArtwork)
-
-        binding.backButton.setOnClickListener {
-            finish()
-        }
 
         with(mediaPlayer) {
             setDataSource(currentTrack.previewUrl)
@@ -72,10 +71,6 @@ class PlayerActivity: AppCompatActivity() {
                 onPlayerComplete()
             }
         }
-
-        binding.btnPlayPause.setOnClickListener {
-            handlePlayerClick()
-        }
     }
 
     override fun onStop() {
@@ -86,8 +81,10 @@ class PlayerActivity: AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (mediaPlayer.isPlaying) mediaPlayer.stop()
-        mediaPlayer.release()
+        with(mediaPlayer) {
+            if (isPlaying) stop()
+            release()
+        }
         handler?.removeCallbacksAndMessages(null)
     }
 
@@ -124,8 +121,13 @@ class PlayerActivity: AppCompatActivity() {
 
     private fun onPlayerComplete() {
         millsPlayed = 0L
-        binding.tvTimeCountdown.text = formatTimeMMSS(millsPlayed)
-        binding.btnPlayPause.setImageResource(R.drawable.ic_play_button)
+        with (binding) {
+            tvTimeCountdown.text = formatTimeMMSS(millsPlayed)
+            btnPlayPause.setImageResource(R.drawable.ic_play_button)
+        }
     }
 
+    companion object {
+        private const val DELAY = 100L
+    }
 }

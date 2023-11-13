@@ -22,14 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
 
-    private companion object {
-        const val SAVED_SEARCH_STRING = "SAVED_SEARCH_STRING"
-        const val LAST_SEARCH_STRING = "LAST_SEARCH_STRING"
-
-        private const val DEBOUNCE_SEARCH_DELAY = 2000L
-        private const val DEBOUNCE_CLICK_DELAY = 1000L
-    }
-
     private lateinit var binding: ActivitySearchBinding
 
     private val retrofit = Retrofit.Builder()
@@ -55,6 +47,9 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        history = (application as App).history
+        historyAdapter = TracksAdapter(history.allTracks()) { track: Track -> clickOnTrack(track) }
+
         binding = ActivitySearchBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -62,10 +57,6 @@ class SearchActivity : AppCompatActivity() {
         binding.backButton.setOnClickListener() {
             finish()
         }
-
-        history = (application as App).history
-        historyAdapter = TracksAdapter(history.allTracks()) { track: Track -> clickOnTrack(track) }
-
 
         binding.searchList.adapter = adapter
         binding.searchHistoryList.adapter = historyAdapter
@@ -184,10 +175,12 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showResult(type: SearchResultType){
-        binding.searchList.isVisible = (type == SearchResultType.OK)
-        binding.noResults.isVisible = (type == SearchResultType.NO_RESULTS)
-        binding.noConnection.isVisible = (type == SearchResultType.ERROR)
-        binding.progressBar.isVisible = (type == SearchResultType.IN_PROGRESS)
+        with(binding) {
+            searchList.isVisible = (type == SearchResultType.OK)
+            noResults.isVisible = (type == SearchResultType.NO_RESULTS)
+            noConnection.isVisible = (type == SearchResultType.ERROR)
+            progressBar.isVisible = (type == SearchResultType.IN_PROGRESS)
+        }
     }
 
     private fun updateHistoryVisibility() {
@@ -210,8 +203,10 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, DEBOUNCE_SEARCH_DELAY)
+        with(handler){
+            removeCallbacks(searchRunnable)
+            postDelayed(searchRunnable, DEBOUNCE_SEARCH_DELAY)
+        }
     }
 
     private fun clickDebounce():Boolean {
@@ -221,6 +216,14 @@ class SearchActivity : AppCompatActivity() {
             handler.postDelayed({isClickAllowed = true}, DEBOUNCE_CLICK_DELAY)
         }
         return current
+    }
+
+    private companion object {
+        const val SAVED_SEARCH_STRING = "SAVED_SEARCH_STRING"
+        const val LAST_SEARCH_STRING = "LAST_SEARCH_STRING"
+
+        private const val DEBOUNCE_SEARCH_DELAY = 2000L
+        private const val DEBOUNCE_CLICK_DELAY = 1000L
     }
 }
 
