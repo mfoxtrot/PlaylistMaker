@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.app.Activity
 import android.content.Intent
@@ -13,22 +13,23 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import com.example.playlistmaker.App
+import com.example.playlistmaker.Creator
+import com.example.playlistmaker.ui.player.PlayerActivity
+import com.example.playlistmaker.R
+import com.example.playlistmaker.SearchHistory
+import com.example.playlistmaker.SearchResultType
 import com.example.playlistmaker.databinding.ActivitySearchBinding
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import com.example.playlistmaker.domain.api.TracksInteractor
+import com.example.playlistmaker.domain.models.FoundTracksInfo
+import com.example.playlistmaker.domain.models.Track
+import java.util.function.Consumer
 
 class SearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://itunes.apple.com")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val itunesSearchService = retrofit.create(ItunesSearchApiService::class.java)
+    private val tracksInteractorImpl = Creator.provideTracksInteractorImpl()
 
     private lateinit var history: SearchHistory
     private lateinit var historyAdapter: TracksAdapter
@@ -40,6 +41,7 @@ class SearchActivity : AppCompatActivity() {
     private var lastSearchString = ""
 
     private val handler = Handler(Looper.getMainLooper())
+    private var workRunnable: Runnable? = null
     private val searchRunnable = Runnable { findTracks(searchString) }
 
     private var isClickAllowed = true
@@ -144,34 +146,31 @@ class SearchActivity : AppCompatActivity() {
 
     private fun findTracks(text: String) {
         showResult(SearchResultType.IN_PROGRESS)
-        itunesSearchService
-            .searchSongs(text)
-            .enqueue(object :Callback<SearchResponse> {
-                override fun onResponse(
-                    call: Call<SearchResponse>,
-                    response: Response<SearchResponse>
-                ) {
-                    when (response.code()) {
-                        200 -> {
-                            val results = response.body()?.results
-                            if (results?.isNotEmpty() == true) {
-                                trackList.clear()
-                                trackList.addAll(results)
-                                adapter.notifyDataSetChanged()
-                                showResult(SearchResultType.OK)
-                            } else {
-                                showResult(SearchResultType.NO_RESULTS)
-                            }
-                        }
-                        else -> showResult(SearchResultType.ERROR)
+        tracksInteractorImpl.findTracks(
+            searchString = text,
+            consumer = object : TracksInteractor.TracksConsumer {
+                override fun consume(foundTracks: FoundTracksInfo) {
+                    var currentRunnable = workRunnable
+                    if (currentRunnable != null) {
+                        handler.removeCallbacks(currentRunnable)
                     }
+                    val newRunnable = Runnable {
+                        if (foundTracks.isSuccess && foundTracks.data.isNotEmpty()) {
+                            trackList.clear()
+                            trackList.addAll(foundTracks.data)
+                            adapter.notifyDataSetChanged()
+                            showResult(SearchResultType.OK)
+                        } else if (foundTracks.isSuccess && foundTracks.data.isEmpty()) {
+                            showResult(SearchResultType.NO_RESULTS)
+                        } else if (!foundTracks.isSuccess) {
+                            showResult(SearchResultType.ERROR)
+                        }
+                    }
+                    workRunnable = newRunnable
+                    handler.post(newRunnable)
                 }
-
-                override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                    showResult(SearchResultType.ERROR)
-                }
-
-            })
+            }
+        )
     }
 
     private fun showResult(type: SearchResultType){
