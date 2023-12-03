@@ -23,7 +23,6 @@ import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.models.FoundTracksInfo
 import com.example.playlistmaker.domain.models.Track
-import java.util.function.Consumer
 
 class SearchActivity : AppCompatActivity() {
 
