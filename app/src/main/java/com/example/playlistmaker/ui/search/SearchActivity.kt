@@ -17,9 +17,9 @@ import com.example.playlistmaker.App
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.ui.player.PlayerActivity
 import com.example.playlistmaker.R
-import com.example.playlistmaker.SearchHistory
 import com.example.playlistmaker.SearchResultType
 import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.domain.api.HistoryInteractor
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.models.FoundTracksInfo
 import com.example.playlistmaker.domain.models.Track
@@ -29,8 +29,9 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
 
     private val tracksInteractorImpl = Creator.provideTracksInteractorImpl()
+    private lateinit var historyInteractorImpl: HistoryInteractor
 
-    private lateinit var history: SearchHistory
+    private lateinit var historyLocal: ArrayList<Track>
     private lateinit var historyAdapter: TracksAdapter
 
     private val trackList: ArrayList<Track> = arrayListOf()
@@ -48,8 +49,17 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        history = (application as App).history
-        historyAdapter = TracksAdapter(history.allTracks()) { track: Track -> clickOnTrack(track) }
+        historyInteractorImpl = Creator.provideHistoryInteractorImp(application as App)
+        historyInteractorImpl.readHistory(
+            consumer = object : HistoryInteractor.ReadHistoryConsumer{
+                override fun consume(history: ArrayList<Track>) {
+                    historyLocal = history
+                    historyAdapter = TracksAdapter(historyLocal) {
+                            track: Track -> clickOnTrack(track)
+                    }
+                }
+            }
+        )
 
         binding = ActivitySearchBinding.inflate(layoutInflater)
         val view = binding.root
@@ -110,9 +120,14 @@ class SearchActivity : AppCompatActivity() {
         }
 
         binding.btnClearHistory.setOnClickListener {
-            (application as App).history.clear()
-            historyAdapter.notifyDataSetChanged()
-            updateHistoryVisibility()
+            historyInteractorImpl.clearHistory(
+                consumer = object : HistoryInteractor.ClearHistoryConsumer{
+                    override fun consume() {
+                        historyAdapter.notifyDataSetChanged()
+                        updateHistoryVisibility()
+                    }
+                }
+            )
         }
     }
 
@@ -144,6 +159,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun findTracks(text: String) {
+        if (text=="") return
         showResult(SearchResultType.IN_PROGRESS)
         tracksInteractorImpl.findTracks(
             searchString = text,
@@ -188,12 +204,19 @@ class SearchActivity : AppCompatActivity() {
     private fun isHistoryVisible():Boolean {
         return binding.searchBox.hasFocus()
                 && searchString.isNullOrEmpty()
-                && history.allTracks().isNotEmpty()
+                && historyLocal.isNotEmpty()
     }
 
     private fun clickOnTrack(track: Track) {
         if (clickDebounce()) {
-            history.addTrack(track)
+            historyInteractorImpl.addTrack(
+                track = track,
+                consumer = object: HistoryInteractor.AddTrackConsumer{
+                    override fun consume(history: ArrayList<Track>) {
+                        historyLocal = history
+                    }
+
+                })
             historyAdapter.notifyDataSetChanged()
             intent = Intent(this, PlayerActivity::class.java)
             startActivity(intent)

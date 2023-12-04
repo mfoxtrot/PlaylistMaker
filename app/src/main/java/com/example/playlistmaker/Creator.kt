@@ -2,14 +2,18 @@ package com.example.playlistmaker
 
 import android.content.Context
 import com.example.playlistmaker.data.AppSettingsRepositoryImpl
+import com.example.playlistmaker.data.HistoryRepositoryImpl
 import com.example.playlistmaker.data.TracksRepositoryImpl
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.example.playlistmaker.data.storage.SharedPreferencesStorageClient
 import com.example.playlistmaker.domain.api.AppSettingsInteractor
 import com.example.playlistmaker.domain.api.AppSettingsRepository
+import com.example.playlistmaker.domain.api.HistoryInteractor
+import com.example.playlistmaker.domain.api.HistoryRepository
 import com.example.playlistmaker.domain.impl.AppSettingsInteractorImpl
 import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.api.TracksRepository
+import com.example.playlistmaker.domain.impl.HistoryInteractorImpl
 import com.example.playlistmaker.domain.impl.TracksInteractorImpl
 
 object Creator {
@@ -27,5 +31,13 @@ object Creator {
 
     fun provideAppSettingsInteractorImpl(context: Context): AppSettingsInteractor {
         return AppSettingsInteractorImpl(getAppSettingsRepository(context))
+    }
+
+    fun getHistoryRepository(context: Context): HistoryRepository {
+        return HistoryRepositoryImpl(SharedPreferencesStorageClient(context))
+    }
+
+    fun provideHistoryInteractorImp(context: Context): HistoryInteractor {
+        return HistoryInteractorImpl(getHistoryRepository(context))
     }
 }

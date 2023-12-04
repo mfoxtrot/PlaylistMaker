@@ -11,7 +11,6 @@ import com.example.playlistmaker.domain.models.AppSettings
 const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
 class App: Application() {
     private lateinit var sharedPreferences: SharedPreferences
-    lateinit var history: SearchHistory
 
     private val handler = Handler(Looper.getMainLooper())
     lateinit var currentAppSettings:AppSettings
@@ -33,7 +32,6 @@ class App: Application() {
                 }
             }
         )
-        history = SearchHistory(sharedPreferences)
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

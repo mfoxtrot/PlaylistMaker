@@ -10,8 +10,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterInside
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.App
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.domain.api.HistoryInteractor
 import com.example.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -19,11 +21,12 @@ import java.util.Locale
 class PlayerActivity: AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var currentTrack: Track
+    private lateinit var historyInteractorImpl: HistoryInteractor
     private var mediaPlayer=MediaPlayer()
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
-    private var handler: Handler? = null
+    private val handler = Handler(Looper.getMainLooper())
 
     private var millsPlayed = 0L
 
@@ -33,10 +36,17 @@ class PlayerActivity: AppCompatActivity() {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
-        handler = Handler(Looper.getMainLooper())
-
-        currentTrack = (application as App).history.lastVisitingTrack()
+        historyInteractorImpl = Creator.provideHistoryInteractorImp(application as App)
+        historyInteractorImpl.lastTrack(
+            consumer = object : HistoryInteractor.LastTrackConsumer{
+                override fun consume(lastTrack: Track?) {
+                    if (lastTrack == null) finish()
+                    else {
+                        currentTrack = lastTrack
+                    }
+                }
+            }
+        )
 
         with(binding) {
             tvCountry.text = currentTrack.country
@@ -100,7 +110,6 @@ class PlayerActivity: AppCompatActivity() {
             binding.btnPlayPause.setImageResource(R.drawable.ic_pause_button)
             handler?.post { mediaPlayer.start() }
             handler?.post(checkTimer(System.currentTimeMillis()))
-
         }
     }
 
