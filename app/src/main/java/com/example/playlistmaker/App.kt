@@ -2,25 +2,54 @@ package com.example.playlistmaker
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.os.Handler
+import android.os.Looper
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.playlistmaker.domain.api.AppSettingsInteractor
+import com.example.playlistmaker.domain.models.AppSettings
 
 const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
-const val DARK_THEME_KEY = "dark_theme"
 class App: Application() {
-    private var darkTheme = false
     private lateinit var sharedPreferences: SharedPreferences
-    lateinit var history: SearchHistory
+
+    private val handler = Handler(Looper.getMainLooper())
+    lateinit var currentAppSettings:AppSettings
+    private lateinit var appSettingsInteractorImp: AppSettingsInteractor
+
     override fun onCreate() {
         super.onCreate()
         sharedPreferences = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        darkTheme = sharedPreferences.getBoolean(DARK_THEME_KEY, false)
-        switchTheme(darkTheme)
 
-        history = SearchHistory(sharedPreferences)
+        appSettingsInteractorImp = Creator.provideAppSettingsInteractorImpl(applicationContext)
+        appSettingsInteractorImp.getCurrentSettings(
+            consumer = object : AppSettingsInteractor.GetSettingsConsumer {
+                override fun consume(currentSettings: AppSettings) {
+                    currentAppSettings = currentSettings
+                    val runnable = Runnable {
+                        setDarkTheme(currentSettings.isDarkTheme)
+                    }
+                    handler.post(runnable)
+                }
+            }
+        )
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
+        currentAppSettings.isDarkTheme = darkThemeEnabled
+        appSettingsInteractorImp.setNewSettings(
+            newSettings = currentAppSettings,
+            consumer = object: AppSettingsInteractor.SetSettingsConsumer {
+                override fun consume() {
+                    val runnable = Runnable {
+                        setDarkTheme(darkThemeEnabled)
+                    }
+                    handler.post(runnable)
+                }
+            }
+        )
+    }
+
+    private fun setDarkTheme(darkThemeEnabled: Boolean) {
         AppCompatDelegate.setDefaultNightMode(
             if (darkThemeEnabled) {
                 AppCompatDelegate.MODE_NIGHT_YES
@@ -28,13 +57,6 @@ class App: Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-
-        sharedPreferences.edit()
-            .putBoolean(DARK_THEME_KEY, darkTheme)
-            .apply()
     }
 
-    fun isDarkThemeSwitchedOn(): Boolean {
-        return darkTheme
-    }
 }

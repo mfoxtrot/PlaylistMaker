@@ -1,23 +1,28 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.settings
 
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.playlistmaker.App
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
+import com.example.playlistmaker.domain.models.AppSettings
 
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
+    private lateinit var currentAppSettings: AppSettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        currentAppSettings = (application as App).currentAppSettings
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
-        binding.switchDarkTheme.isChecked = (applicationContext as App).isDarkThemeSwitchedOn()
+        binding.switchDarkTheme.isChecked = currentAppSettings.isDarkTheme
 
         binding.backButton.setOnClickListener{
             finish()

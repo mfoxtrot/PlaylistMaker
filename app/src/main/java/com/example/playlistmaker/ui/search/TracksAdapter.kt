@@ -1,11 +1,10 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.databinding.TrackCardBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
+import com.example.playlistmaker.domain.models.Track
 
 class TracksAdapter(
     private val tracks: ArrayList<Track>,
