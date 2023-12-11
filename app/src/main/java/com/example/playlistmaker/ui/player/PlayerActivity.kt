@@ -1,6 +1,5 @@
 package com.example.playlistmaker.ui.player
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,6 +13,7 @@ import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.api.HistoryInteractor
+import com.example.playlistmaker.domain.api.PlayerInteractor
 import com.example.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -22,7 +22,7 @@ class PlayerActivity: AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private lateinit var currentTrack: Track
     private lateinit var historyInteractorImpl: HistoryInteractor
-    private var mediaPlayer=MediaPlayer()
+    private lateinit var playerInteractorImpl: PlayerInteractor
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
@@ -48,6 +48,14 @@ class PlayerActivity: AppCompatActivity() {
             }
         )
 
+        playerInteractorImpl = Creator.providePlayerIntercatorImpl()
+
+        playerInteractorImpl.preparePlayer(
+                currentTrack.previewUrl,
+                ::onPlayerPrepared,
+                ::onPlayerComplete
+        )
+
         with(binding) {
             tvCountry.text = currentTrack.country
             tvGenre.text = currentTrack.primaryGenreName
@@ -70,32 +78,29 @@ class PlayerActivity: AppCompatActivity() {
             .placeholder(R.drawable.ic_placeholder_large)
             .transform(CenterInside(),RoundedCorners(8))
             .into(binding.ivArtwork)
-
-        with(mediaPlayer) {
-            setDataSource(currentTrack.previewUrl)
-            prepareAsync()
-            setOnPreparedListener {
-                onPlayerPrepared()
-            }
-            setOnCompletionListener {
-                onPlayerComplete()
-            }
-        }
     }
 
     override fun onStop() {
         super.onStop()
-        if (mediaPlayer.isPlaying) mediaPlayer.stop()
-        binding.btnPlayPause.setImageResource(R.drawable.ic_play_button)
+        val runnable = Runnable {
+            playerInteractorImpl.isPlaying(
+                consumer = object : PlayerInteractor.IsPlayingConsumer {
+                    override fun consume(isPlaying: Boolean) {
+                        if (isPlaying) {
+                            handler.post { playerInteractorImpl.pausePlayer() }
+                            binding.btnPlayPause.setImageResource(R.drawable.ic_play_button)
+                        }
+                    }
+                }
+            )
+        }
+        handler.post(runnable)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        with(mediaPlayer) {
-            if (isPlaying) stop()
-            release()
-        }
         handler?.removeCallbacksAndMessages(null)
+        handler.post { playerInteractorImpl.destroyPlayer() }
     }
 
     private fun formatTimeMMSS(timeMillis: Long):String {
@@ -103,14 +108,23 @@ class PlayerActivity: AppCompatActivity() {
     }
 
     private fun handlePlayerClick() {
-        if (mediaPlayer.isPlaying) {
-            binding.btnPlayPause.setImageResource(R.drawable.ic_play_button)
-            handler?.post {mediaPlayer.pause()}
-        } else {
-            binding.btnPlayPause.setImageResource(R.drawable.ic_pause_button)
-            handler?.post { mediaPlayer.start() }
-            handler?.post(checkTimer(System.currentTimeMillis()))
+        val runnable = Runnable {
+            playerInteractorImpl.isPlaying(
+                consumer = object: PlayerInteractor.IsPlayingConsumer {
+                    override fun consume(isPlaying: Boolean) {
+                        if (isPlaying)  {
+                            binding.btnPlayPause.setImageResource(R.drawable.ic_play_button)
+                            playerInteractorImpl.pausePlayer()
+                        } else {
+                            binding.btnPlayPause.setImageResource(R.drawable.ic_pause_button)
+                            playerInteractorImpl.startPlayer()
+                            handler.post(checkTimer(System.currentTimeMillis()))
+                        }
+                    }
+                }
+            )
         }
+        handler.post(runnable)
     }
 
     private fun checkTimer(startTime: Long): Runnable{
@@ -118,11 +132,17 @@ class PlayerActivity: AppCompatActivity() {
             val currentTime = System.currentTimeMillis()
             millsPlayed += (currentTime - startTime)
             binding.tvTimeCountdown.text = formatTimeMMSS(millsPlayed)
-            if (mediaPlayer.isPlaying) {
-                handler?.postDelayed(checkTimer(currentTime), DELAY)
-            }
+            val runnable = Runnable {
+                playerInteractorImpl.isPlaying(
+                    consumer = object : PlayerInteractor.IsPlayingConsumer {
+                        override fun consume(isPlaying: Boolean) {
+                            if (isPlaying) handler.postDelayed(checkTimer(currentTime), DELAY)
+                        }
+                    }
+                )
         }
-    }
+        handler.post(runnable)
+    }}
 
     private fun onPlayerPrepared() {
         binding.tvTimeCountdown.text = formatTimeMMSS(millsPlayed)
